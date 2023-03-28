@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Insertion</title>
+    {{template "style" .}}
+</head>
+<body>
+    {{template "header" .}}
+    <div class="login-container"> 
+        <form method="post" class="login-form" enctype="multipart/form-data">
+            <h2>Insert your product here</h2>
+            <input class="input" name="title" placeholder="Title" type="text"/>
+            <input class="input" name="description" placeholder="Description" type="text"/>
+            <input class="input" name="address" placeholder="Address" type="text"/>
+            <input class="input" name="price" placeholder="Price" type="text">
+            <input class="input" name="image" type="file"/>
+            <input class="submit-login" type="submit"/>
+            {{if ge .StatusCode 400}}
+                <h5 style="color: red;">{{.Message}}</h5>
+            {{else}}
+                <h5 style="color: green;">{{.Message}}</h5>
+            {{end}}
+        </form>
+    </div>
+</body>
+</html>

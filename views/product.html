@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product</title>
+    {{template "style" .}}
+</head>
+<body>
+    {{template "header" .}}
+    <section class="information">
+        <img src="{{ .ImgURL }}" class="img-p"/>
+        <h2 class="title">{{ .Title }}</h2>
+        <p class="desc">{{ .Description }}</p>
+        <h3 class="address">{{ .Address }}</h3>
+        <h4 class="price"> {{.Price }}$</h4>
+    </section>
+</body>
+</html>
