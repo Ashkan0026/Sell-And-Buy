@@ -6,15 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product</title>
     {{template "style" .}}
-</head>
+</head>`
 <body>
     {{template "header" .}}
     <section class="information">
-        <img src="{{ .ImgURL }}" class="img-p"/>
-        <h2 class="title">{{ .Title }}</h2>
-        <p class="desc">{{ .Description }}</p>
-        <h3 class="address">{{ .Address }}</h3>
-        <h4 class="price"> {{.Price }}$</h4>
+        <img src="{{ .Prd.ImgURL }}" class="img-p"/>
+        <h2 class="title">{{ .Prd.Title }}</h2>
+        <p class="desc">{{ .Prd.Description }}</p>
+        <h3 class="address">Address : {{ .Prd.Address }}</h3>
+        <h4 class="price">Price : {{ .Prd.Price }}$</h4>
+        <form method="post">
+            {{if .Prd.Bought}}
+                <h3 class="title">This Product has been seld</h3>
+            {{else}}
+                <input type="submit" value="Buy" class="buy-button"/>
+            {{end}}
+        </form>
+        {{if .Err}}
+            {{if ge .Err.StatusCode 400}}
+                <h5 style="color: red;">{{ .Err.Message }}</h5>
+            {{else}}
+                <h5 style="color: green;">{{ .Err.Message }}</h5>
+            {{end}}
+        {{end}}
     </section>
 </body>
 </html>

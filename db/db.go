@@ -3,12 +3,14 @@ package db
 import (
 	"database/sql"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"log"
 	"os"
 
 	"github.com/Ashkan0026/sell-the-old/models"
 	"github.com/joho/godotenv"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 )
 
@@ -188,4 +190,28 @@ func ReadProductsFromDB() error {
 		products = append(products, product)
 	}
 	return nil
+}
+
+func AddBoughtToUserList(productId, userId int64) error {
+	var putteds pq.Int64Array
+	err := db.QueryRow("SELECT putted FROM users WHERE id=$1", userId).Scan(&putteds)
+	for _, putt := range putteds {
+		if putt == productId {
+			return errors.New("You can not buy your own product")
+		}
+	}
+	_, err = db.Exec("UPDATE users SET bought = array_append(bought, $1) WHERE id=$2", productId, userId)
+	if err != nil {
+		return err
+	}
+	SetProductAsBought(productId)
+	return nil
+}
+
+func SetProductAsBought(productId int64) {
+	_, err := db.Exec("UPDATE products SET bought = $1 WHERE id=$2", true, productId)
+	if err != nil {
+		log.Printf("Error : %s\n", err.Error())
+		return
+	}
 }

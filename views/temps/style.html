@@ -106,6 +106,7 @@ body{
     padding: 2rem 2rem;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: flex-start;
     gap: 3rem;
 }
@@ -177,7 +178,7 @@ body{
 
 .img-p {
     height: 15rem;
-    width: 24rem;
+    width: 40rem;
     border-radius: 1rem;
 }
 
@@ -187,6 +188,29 @@ body{
     font-size: 0.9rem;
     padding: 0rem 1rem;
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.buy-button {
+    height: 2.5rem;
+    width: 9rem;
+    border-radius: 0.5rem;
+    padding: 0.3rem;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+    background-color: #BAFF39;
+    color: white;
+    transition: 0.6s;
+    align-self: center;
+}
+
+.buy-button:hover {
+    box-shadow: 0px 0px 9px #6E6E6E;
+}
+
+.buy-button:disabled {
+    background-color: #6E6E6E;
+    color: white;
 }
 
 </style>

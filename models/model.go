@@ -22,6 +22,11 @@ type Product struct {
 	ImgURL      string `json:"imgUrl"`
 }
 
+type ProductAndError struct {
+	Prd *Product `json:"product"`
+	Err *Error   `json:"error"`
+}
+
 type HomeData struct {
 	Usr      *User      `json:"usr"`
 	Products []*Product `json:"products"`

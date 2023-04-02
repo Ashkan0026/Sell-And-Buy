@@ -255,5 +255,56 @@ func EachProductPage(w http.ResponseWriter, r *http.Request) {
 		}
 		pr, _ = db.GetProduct(int64(id))
 	}
-	utils.ExecFile("product", w, pr)
+	prAndError := &models.ProductAndError{Prd: pr}
+	utils.ExecFile("product", w, prAndError)
+}
+
+func BuyAProduct(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	idStr, exists := vars["id"]
+	if !exists {
+		return
+	}
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		log.Printf("Error : %s", err.Error())
+		return
+	}
+	product, err := db.GetProduct(int64(id))
+	if err != nil {
+		log.Printf("Error : %s\n", err.Error())
+		return
+	}
+	cookies := db.GetCookies()
+	session, err := cookies.Get(r, "go-sessions")
+	if err != nil {
+		prAndErr := &models.ProductAndError{Err: &models.Error{StatusCode: 404, Message: err.Error()}, Prd: product}
+		utils.ExecFile("product", w, prAndErr)
+		return
+	}
+	authen := session.Values["authenticated"]
+	if authen == nil {
+		prAndErr := &models.ProductAndError{Err: &models.Error{StatusCode: 403, Message: "You haven't logged in yet"}, Prd: product}
+		utils.ExecFile("product", w, prAndErr)
+		return
+	}
+	isAuthen := session.Values["authenticated"].(bool)
+	if !isAuthen {
+		prAndErr := &models.ProductAndError{Err: &models.Error{StatusCode: 403, Message: "User has logged out\n"}, Prd: product}
+		utils.ExecFile("product", w, prAndErr)
+		return
+	}
+	userId := session.Values["userid"].(int64)
+	err = db.AddBoughtToUserList(int64(id), userId)
+	if err != nil {
+		prAndErr := &models.ProductAndError{Err: &models.Error{StatusCode: 500, Message: err.Error()}, Prd: product}
+		utils.ExecFile("product", w, prAndErr)
+		return
+	}
+	pr, err := db.GetProduct(int64(id))
+	if err != nil {
+		log.Printf("Error : %s", err.Error())
+	}
+	prAndError := &models.ProductAndError{Prd: pr, Err: &models.Error{StatusCode: 200, Message: "Product added to your bought list"}}
+	utils.ExecFile("product", w, prAndError)
 }

@@ -72,6 +72,7 @@ func Handler() *mux.Router {
 	router.HandleFunc("/productInsert", handlers.HandleProductInsertPage).Methods("GET")
 	router.HandleFunc("/productInsert", handlers.GetAndSaveProduct).Methods("POST")
 	router.HandleFunc("/products/{id}", handlers.EachProductPage).Methods("GET")
+	router.HandleFunc("/products/{id}", handlers.BuyAProduct).Methods("POST")
 
 	return router
 }
