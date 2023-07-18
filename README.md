@@ -3,4 +3,5 @@ A paltform for people to sell and buy used products and goods, you can put your 
 To run the project try:
 
 go build
+
 go run main.go
